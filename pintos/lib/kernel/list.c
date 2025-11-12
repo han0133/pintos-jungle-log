@@ -1,6 +1,24 @@
 #include "list.h"
 #include "../debug.h"
 
+// 리스트 삽입 최적화 측정용 코드
+#ifdef MEASURE_INSERT
+static unsigned insert_ordered_count = 0;
+
+void print_list_stats(void)
+{
+	printf("\n=== LIST STATISTICS ===\n");
+	printf("list_insert_ordered() calls: %u\n", insert_ordered_count);
+	printf("========================\n\n");
+}
+
+void reset_list_stats(void)
+{
+	insert_ordered_count = 0;
+}
+#endif
+// 리스트 삽입 최적화 측정용 코드 END.
+
 /* Our doubly linked lists have two header elements: the "head"
 	 just before the first element and the "tail" just after the
 	 last element.  The `prev' link of the front header is null, as
@@ -440,6 +458,12 @@ void list_sort(struct list *list, list_less_func *less, void *aux)
 void list_insert_ordered(struct list *list, struct list_elem *elem,
 												 list_less_func *less, void *aux)
 {
+// 리스트 삽입 최적화 측정용 코드
+#ifdef MEASURE_INSERT
+	insert_ordered_count++;
+#endif
+	// 리스트 삽입 최적화 측정용 코드 END.
+
 	struct list_elem *e;
 
 	ASSERT(list != NULL);
