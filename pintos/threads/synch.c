@@ -577,6 +577,9 @@ void recalculate_priority(void)
 {
 	struct thread *curr = thread_current();
 
+	// 우선순위 재계산
+	int old_priority = curr->priority;
+
 	// 1단계: 스레드의 우선순위를 기본(original) 우선순위로 초기화
 	// (기부받은 우선순위를 모두 제거하고 원래 값으로 복원)
 	curr->priority = curr->original_priority;
@@ -587,13 +590,13 @@ void recalculate_priority(void)
 	{
 		// donators 리스트의 맨 앞 요소 가져오기
 		// (리스트는 우선순위 내림차순 정렬되어 있으므로 front = 최고 우선순위)
-		struct thread *top_donor = list_entry(list_front(&curr->donators), struct thread, donation_elem);
+		struct thread *top_donator = list_entry(list_front(&curr->donators), struct thread, donation_elem);
 
 		// 3단계: 기부받은 우선순위와 원래 우선순위 비교
 		// 기부받은 우선순위가 더 높으면 그 값을 사용
-		if (top_donor->priority > curr->priority)
+		if (top_donator->priority > curr->priority)
 		{
-			curr->priority = top_donor->priority;
+			curr->priority = top_donator->priority;
 		}
 	}
 }
