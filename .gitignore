@@ -29,5 +29,3 @@ core
 # macOS
 .DS_Store
 
-# 직접 추가
-*.md
